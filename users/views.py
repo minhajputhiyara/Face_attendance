@@ -50,8 +50,7 @@ def register(request):
 		form=UserCreationForm()
 	return render(request,'users/register.html', {'form' : form})
 
-@login_required
 def logout_view(request):
     logout(request)
     messages.success(request, 'You have been successfully logged out!')
-    return redirect('login')
+    return redirect('home')
