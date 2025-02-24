@@ -10,6 +10,7 @@ from PIL import Image
 import os
 import csv
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
 import pandas as pd
 import joblib
 import json
@@ -238,7 +239,7 @@ def convert_hours_to_hours_mins(hours):
 		
 
 #used
-def hours_vs_date_given_employee(present_qs,time_qs,admin=True):
+def hours_vs_date_given_student(present_qs,time_qs,admin=True):
 	register_matplotlib_converters()
 	df_hours=[]
 	df_break_hours=[]
@@ -303,13 +304,13 @@ def hours_vs_date_given_employee(present_qs,time_qs,admin=True):
 		plt.savefig('./recognition/static/recognition/img/attendance_graphs/hours_vs_date/1.png')
 		plt.close()
 	else:
-		plt.savefig('./recognition/static/recognition/img/attendance_graphs/employee_login/1.png')
+		plt.savefig('./recognition/static/recognition/img/attendance_graphs/student_login/1.png')
 		plt.close()
 	return qs
 	
 
 #used
-def hours_vs_employee_given_date(present_qs,time_qs):
+def hours_vs_student_given_date(present_qs,time_qs):
 	register_matplotlib_converters()
 	df_hours=[]
 	df_break_hours=[]
@@ -365,19 +366,19 @@ def hours_vs_employee_given_date(present_qs,time_qs):
 	plt.xticks(rotation='vertical')
 	rcParams.update({'figure.autolayout': True})
 	plt.tight_layout()
-	plt.savefig('./recognition/static/recognition/img/attendance_graphs/hours_vs_employee/1.png')
+	plt.savefig('./recognition/static/recognition/img/attendance_graphs/hours_vs_student/1.png')
 	plt.close()
 	return qs
 
 
-def total_number_employees():
+def total_number_students():
 	qs=User.objects.all()
 	return (len(qs) -1)
 	# -1 to account for admin 
 
 
 
-def employees_present_today():
+def students_present_today():
 	today=datetime.date.today()
 	qs=Present.objects.filter(date=today).filter(present=True)
 	return len(qs)
@@ -386,16 +387,16 @@ def employees_present_today():
 
 
 #used	
-def this_week_emp_count_vs_date():
+def this_week_student_count_vs_date():
 	today=datetime.date.today()
 	some_day_last_week=today-datetime.timedelta(days=7)
 	monday_of_last_week=some_day_last_week-  datetime.timedelta(days=(some_day_last_week.isocalendar()[2] - 1))
 	monday_of_this_week = monday_of_last_week + datetime.timedelta(days=7)
 	qs=Present.objects.filter(date__gte=monday_of_this_week).filter(date__lte=today)
 	str_dates=[]
-	emp_count=[]
+	student_count=[]
 	str_dates_all=[]
-	emp_cnt_all=[]
+	student_cnt_all=[]
 	cnt=0
 	
 	
@@ -406,7 +407,7 @@ def this_week_emp_count_vs_date():
 		date=obj.date
 		str_dates.append(str(date))
 		qs=Present.objects.filter(date=date).filter(present=True)
-		emp_count.append(len(qs))
+		student_count.append(len(qs))
 
 
 	while(cnt<5):
@@ -417,9 +418,9 @@ def this_week_emp_count_vs_date():
 		if(str_dates.count(date))>0:
 			idx=str_dates.index(date)
 
-			emp_cnt_all.append(emp_count[idx])
+			student_cnt_all.append(student_count[idx])
 		else:
-			emp_cnt_all.append(0)
+			student_cnt_all.append(0)
 
 	
 	
@@ -429,10 +430,10 @@ def this_week_emp_count_vs_date():
 
 	df=pd.DataFrame()
 	df["date"]=str_dates_all
-	df["Number of employees"]=emp_cnt_all
+	df["Number of students"]=student_cnt_all
 	
 	
-	sns.lineplot(data=df,x='date',y='Number of employees')
+	sns.lineplot(data=df,x='date',y='Number of students')
 	plt.savefig('./recognition/static/recognition/img/attendance_graphs/this_week/1.png')
 	plt.close()
 
@@ -442,18 +443,18 @@ def this_week_emp_count_vs_date():
 
 
 #used
-def last_week_emp_count_vs_date():
+def last_week_student_count_vs_date():
 	today=datetime.date.today()
 	some_day_last_week=today-datetime.timedelta(days=7)
 	monday_of_last_week=some_day_last_week-  datetime.timedelta(days=(some_day_last_week.isocalendar()[2] - 1))
 	monday_of_this_week = monday_of_last_week + datetime.timedelta(days=7)
 	qs=Present.objects.filter(date__gte=monday_of_last_week).filter(date__lt=monday_of_this_week)
 	str_dates=[]
-	emp_count=[]
+	student_count=[]
 
 
 	str_dates_all=[]
-	emp_cnt_all=[]
+	student_cnt_all=[]
 	cnt=0
 	
 	
@@ -464,7 +465,7 @@ def last_week_emp_count_vs_date():
 		date=obj.date
 		str_dates.append(str(date))
 		qs=Present.objects.filter(date=date).filter(present=True)
-		emp_count.append(len(qs))
+		student_count.append(len(qs))
 
 
 	while(cnt<5):
@@ -475,10 +476,10 @@ def last_week_emp_count_vs_date():
 		if(str_dates.count(date))>0:
 			idx=str_dates.index(date)
 
-			emp_cnt_all.append(emp_count[idx])
+			student_cnt_all.append(student_count[idx])
 			
 		else:
-			emp_cnt_all.append(0)
+			student_cnt_all.append(0)
 
 	
 	
@@ -488,12 +489,12 @@ def last_week_emp_count_vs_date():
 
 	df=pd.DataFrame()
 	df["date"]=str_dates_all
-	df["emp_count"]=emp_cnt_all
+	df["student_count"]=student_cnt_all
 	
 
 	
 	
-	sns.lineplot(data=df,x='date',y='emp_count')
+	sns.lineplot(data=df,x='date',y='student_count')
 	plt.savefig('./recognition/static/recognition/img/attendance_graphs/last_week/1.png')
 	plt.close()
 
@@ -516,7 +517,7 @@ def dashboard(request):
         return render(request, 'recognition/admin_dashboard.html')
     else:
         print("not admin")
-        return render(request, 'recognition/employee_dashboard.html')
+        return render(request, 'recognition/student_dashboard.html')
 
 @login_required
 def add_photos(request):
@@ -532,7 +533,7 @@ def add_photos(request):
             messages.success(request, f'Dataset Created')
             return redirect('add-photos')
         else:
-            messages.warning(request, f'No such username found. Please register employee first.')
+            messages.warning(request, f'No such username found. Please register student first.')
             return redirect('dashboard')
 
 
@@ -629,7 +630,8 @@ def mark_your_attendance(request):
                     print(f"Error processing face: {str(e)}")
                     continue
 
-            cv2.imshow("Mark Attendance - Press 'q' to quit", frame)
+            cv2.imshow("Check In - Press 'q' to quit", frame)
+            cv2.moveWindow("Check In - Press 'q' to quit", 400, 100)  # Position the window
             key = cv2.waitKey(1) & 0xFF
             if key == ord("q"):
                 break
@@ -697,7 +699,7 @@ def mark_your_attendance_out(request):
                 continue
                 
             retries = 0  # Reset retries on successful frame capture
-            frame = imutils.resize(frame, width=800)
+            frame = imutils.resize(frame, width=400)  # Smaller width for check-out
             gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             faces = detector(gray_frame, 0)
 
@@ -738,7 +740,8 @@ def mark_your_attendance_out(request):
                     print(f"Error processing face: {str(e)}")
                     continue
 
-            cv2.imshow("Mark Attendance Out - Press 'q' to quit", frame)
+            cv2.imshow("Check Out - Press 'q' to quit", frame)
+            cv2.moveWindow("Check Out - Press 'q' to quit", 800, 100)  # Position the window to the right
             key = cv2.waitKey(1) & 0xFF
             if key == ord("q"):
                 break
@@ -766,56 +769,90 @@ def mark_your_attendance_out(request):
 def train(request):
     if not request.user.username.startswith(('admin', 'admin2')):
         return redirect('not-authorised')
-
+    
     training_dir = 'face_recognition_data/training_dataset'
     
-    count = 0
-    for person_name in os.listdir(training_dir):
+    # First check if directory exists
+    if not os.path.exists(training_dir):
+        messages.error(request, 'Training directory not found. Please add photos first.')
+        return render(request, "recognition/train.html")
+    
+    # Check if there are enough people (at least 2)
+    people = [d for d in os.listdir(training_dir) 
+             if os.path.isdir(os.path.join(training_dir, d))]
+    
+    if len(people) < 2:
+        messages.error(request, 'Need photos of at least 2 different people for training. Currently have photos of {} person(s).'.format(len(people)))
+        return render(request, "recognition/train.html")
+    
+    # Check if there are any images
+    image_count = 0
+    for person_name in people:
         curr_directory = os.path.join(training_dir, person_name)
-        if not os.path.isdir(curr_directory):
-            continue
-        for imagefile in image_files_in_folder(curr_directory):
-            count += 1
+        image_count += len([f for f in os.listdir(curr_directory) 
+                          if f.lower().endswith(('.jpg', '.jpeg', '.png'))])
+
+    if image_count == 0:
+        messages.error(request, 'No training images found. Please add photos first.')
+        return render(request, "recognition/train.html")
 
     X = []
     y = []
-    i = 0
 
-    for person_name in os.listdir(training_dir):
-        print(str(person_name))
+    # Process each image
+    for person_name in people:
         curr_directory = os.path.join(training_dir, person_name)
-        if not os.path.isdir(curr_directory):
-            continue
+        person_images = 0
         for imagefile in image_files_in_folder(curr_directory):
-            print(str(imagefile))
             image = cv2.imread(imagefile)
+            if image is None:
+                print(f"Could not read {imagefile}")
+                continue
             try:
-                X.append((face_recognition.face_encodings(image)[0]).tolist())
-                y.append(person_name)
-                i += 1
-            except:
-                print("removed")
+                face_encodings = face_recognition.face_encodings(image)
+                if len(face_encodings) > 0:
+                    X.append(face_encodings[0].tolist())
+                    y.append(person_name)
+                    person_images += 1
+                else:
+                    print(f"No face found in {imagefile}")
+                    os.remove(imagefile)
+            except Exception as e:
+                print(f"Error processing {imagefile}: {str(e)}")
                 os.remove(imagefile)
+        
+        if person_images == 0:
+            messages.warning(request, f'Warning: No valid face images found for {person_name}')
 
-    targets = np.array(y)
-    encoder = LabelEncoder()
-    encoder.fit(y)
-    y = encoder.transform(y)
-    X1 = np.array(X)
-    print("shape: " + str(X1.shape))
-    np.save('face_recognition_data/classes.npy', encoder.classes_)
-    svc = SVC(kernel='linear', probability=True, random_state=42)
-    svc.fit(X1, y)
-    svc_save_path = "face_recognition_data/svc.sav"
-    with open(svc_save_path, 'wb') as f:
-        pickle.dump(svc, f, protocol=4)
+    # Check if we have enough valid faces for each person
+    unique_people = set(y)
+    if len(unique_people) < 2:
+        messages.error(request, f'Need valid face photos of at least 2 different people. Currently have photos of {len(unique_people)} person(s).')
+        return render(request, "recognition/train.html")
 
-    vizualize_Data(X1, targets)
-    
-    messages.success(request, f'Training Complete.')
+    try:
+        X = np.array(X)
+        targets = np.array(y)
+        
+        encoder = LabelEncoder()
+        encoder.fit(y)
+        y = encoder.transform(y)
+        
+        np.save('face_recognition_data/classes.npy', encoder.classes_)
+        
+        svc = SVC(kernel='linear', probability=True, random_state=42)
+        svc.fit(X, y)
+        
+        with open('face_recognition_data/svc.sav', 'wb') as f:
+            pickle.dump(svc, f, protocol=4)
 
+        vizualize_Data(X, targets)
+        messages.success(request, 'Training Complete.')
+        
+    except Exception as e:
+        messages.error(request, f'Error during training: {str(e)}')
+        
     return render(request, "recognition/train.html")
-
 
 @login_required
 def not_authorised(request):
@@ -825,11 +862,11 @@ def not_authorised(request):
 
 @login_required
 def view_attendance_home(request):
-	total_num_of_emp=total_number_employees()
-	emp_present_today=employees_present_today()
-	this_week_emp_count_vs_date()
-	last_week_emp_count_vs_date()
-	return render(request,"recognition/view_attendance_home.html", {'total_num_of_emp' : total_num_of_emp, 'emp_present_today': emp_present_today})
+	total_num_of_students=total_number_students()
+	students_present=students_present_today()
+	this_week_student_count_vs_date()
+	last_week_student_count_vs_date()
+	return render(request,"recognition/view_attendance_home.html", {'total_num_of_students' : total_num_of_students, 'students_present_today': students_present})
 
 
 @login_required
@@ -849,7 +886,7 @@ def view_attendance_date(request):
 			time_qs=Time.objects.filter(date=date)
 			present_qs=Present.objects.filter(date=date)
 			if(len(time_qs)>0 or len(present_qs)>0):
-				qs=hours_vs_employee_given_date(present_qs,time_qs)
+				qs=hours_vs_student_given_date(present_qs,time_qs)
 
 
 				return render(request,'recognition/view_attendance_date.html', {'form' : form,'qs' : qs })
@@ -872,7 +909,7 @@ def view_attendance_date(request):
 
 
 @login_required
-def view_attendance_employee(request):
+def view_attendance_student(request):
 	if request.user.username not in ('admin', 'admin2'):
 		return redirect('not-authorised')
 	time_qs=None
@@ -894,7 +931,7 @@ def view_attendance_employee(request):
 				
 				if date_to < date_from:
 					messages.warning(request, f'Invalid date selection.')
-					return redirect('view-attendance-employee')
+					return redirect('view-attendance-student')
 				else:
 					
 
@@ -902,12 +939,12 @@ def view_attendance_employee(request):
 					present_qs=present_qs.filter(date__gte=date_from).filter(date__lte=date_to).order_by('-date')
 					
 					if (len(time_qs)>0 or len(present_qs)>0):
-						qs=hours_vs_date_given_employee(present_qs,time_qs,admin=True)
-						return render(request,'recognition/view_attendance_employee.html', {'form' : form, 'qs' :qs})
+						qs=hours_vs_date_given_student(present_qs,time_qs,admin=True)
+						return render(request,'recognition/view_attendance_student.html', {'form' : form, 'qs' :qs})
 					else:
 						#print("inside qs is None")
 						messages.warning(request, f'No records for selected duration.')
-						return redirect('view-attendance-employee')
+						return redirect('view-attendance-student')
 
 
 
@@ -917,20 +954,20 @@ def view_attendance_employee(request):
 			else:
 				print("invalid username")
 				messages.warning(request, f'No such username found.')
-				return redirect('view-attendance-employee')
+				return redirect('view-attendance-student')
 
 
 	else:
 		
 
 			form=UsernameAndDateForm()
-			return render(request,'recognition/view_attendance_employee.html', {'form' : form, 'qs' :qs})
+			return render(request,'recognition/view_attendance_student.html', {'form' : form, 'qs' :qs})
 
 
 
 
 @login_required
-def view_my_attendance_employee_login(request):
+def view_my_attendance_student_login(request):
 	if request.user.username in ('admin', 'admin2'):
 		return redirect('not-authorised')
 	qs=None
@@ -946,7 +983,7 @@ def view_my_attendance_employee_login(request):
 			date_to=form.cleaned_data.get('date_to')
 			if date_to < date_from:
 					messages.warning(request, f'Invalid date selection.')
-					return redirect('view-my-attendance-employee-login')
+					return redirect('view-my-attendance-student-login')
 			else:
 					
 
@@ -954,17 +991,17 @@ def view_my_attendance_employee_login(request):
 					present_qs=present_qs.filter(date__gte=date_from).filter(date__lte=date_to).order_by('-date')
 				
 					if (len(time_qs)>0 or len(present_qs)>0):
-						qs=hours_vs_date_given_employee(present_qs,time_qs,admin=False)
-						return render(request,'recognition/view_my_attendance_employee_login.html', {'form' : form, 'qs' :qs})
+						qs=hours_vs_date_given_student(present_qs,time_qs,admin=False)
+						return render(request,'recognition/view_my_attendance_student_login.html', {'form' : form, 'qs' :qs})
 					else:
 						
 						messages.warning(request, f'No records for selected duration.')
-						return redirect('view-my-attendance-employee-login')
+						return redirect('view-my-attendance-student-login')
 	else:
 		
 
 			form=DateForm_2()
-			return render(request,'recognition/view_my_attendance_employee_login.html', {'form' : form, 'qs' :qs})
+			return render(request,'recognition/view_my_attendance_student_login.html', {'form' : form, 'qs' :qs})
 
 @login_required
 def register(request):

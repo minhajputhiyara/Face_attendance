@@ -19,7 +19,6 @@
     />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
     <style>
       body {
         background: url('{% static "recognition/img/background_image3.png"%}')
@@ -63,17 +62,6 @@
         opacity: 0.5;
       }
     </style>
-
-    <script
-      type="text/javascript"
-      src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"
-    >
-      $(document).ready(function(){
-        $("#train").click(function(){
-          alert("Training begun. This may take upto 5 minutes. Please wait.");
-        });
-      });
-    </script>
   </head>
   <body>
     <script>
@@ -101,7 +89,7 @@
           </h5></a
         >
         <h1 class="text-center section-title" style="margin-bottom: 2em">
-          Welcome, admin.
+          Welcome, {{user.username}}.
         </h1>
       </div>
       <style>
@@ -142,66 +130,21 @@
           margin-bottom:1em;
         }
         */
-        .att {
-          padding-right: 150px;
-        }
-        .lgn {
-          padding-right: 80px;
-        }
       </style>
 
       <div class="row">
-        <div class="col-md-3">
+        <div
+          class="col-md-12"
+          style="padding-left: 620px; margin-left: auto; margin-right: auto"
+        >
           <div
             data-aos="fade-up"
             data-aos-anchor-placement="top-bottom"
             data-aos-duration="1000"
           >
-            <a href="{%url 'register' %}"
+            <a href="{%url 'view-my-attendance-student-login' %}"
               ><img
-                src="{% static 'recognition/img/register1.png' %}"
-                class="img-responsive"
-                style="width: 300px; height: 300px"
-            /></a>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div
-            data-aos="fade-up"
-            data-aos-anchor-placement="top-bottom"
-            data-aos-duration="1500"
-          >
-            <a href="{%url 'add-photos'%}"
-              ><img
-                src="{% static 'recognition/img/addphotos1.png' %}"
-                class="img-responsive"
-                style="width: 300px; height: 300px"
-            /></a>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div
-            data-aos="fade-up"
-            data-aos-anchor-placement="top-bottom"
-            data-aos-duration="2000"
-          >
-            <a href="{%url 'train' %}" id="train"
-              ><img
-                src="{% static 'recognition/img/train1.png' %}"
-                class="img-responsive"
-                style="width: 300px; height: 300px"
-            /></a>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div
-            data-aos="fade-up"
-            data-aos-anchor-placement="top-bottom"
-            data-aos-duration="2500"
-          >
-            <a href="{%url 'view-attendance-home' %}"
-              ><img
-                src="{% static 'recognition/img/reports1.png' %}"
+                src="{% static 'recognition/img/reports2.png' %}"
                 class="img-responsive"
                 style="width: 300px; height: 300px"
             /></a>
@@ -209,21 +152,8 @@
         </div>
       </div>
       <div class="row">
-        <div class="col md-3">
-          <h4 class="text-center att" style="margin-right: -100px">
-            Register New Students
-          </h4>
-        </div>
-        <div class="col md-3">
-          <h4 class="text-center att" style="margin-right: -100px">
-            Add Student Photos
-          </h4>
-        </div>
-        <div class="col md-3">
-          <h4 class="text-center att" style="margin-right: -100px">Train</h4>
-        </div>
-        <div class="col md-3">
-          <h4 class="text-center lgn">View Attendance Reports</h4>
+        <div class="col md-6" style="padding-left: 650px">
+          <h4>View Past Attendance</h4>
         </div>
       </div>
 
@@ -251,5 +181,3 @@
     ></script>
   </body>
 </html>
-
-<!-- HTML !-->

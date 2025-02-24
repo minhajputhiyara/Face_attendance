@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -18,137 +17,7 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-    <style>
-      .hover-underline-animation1 {
-        display: inline-block;
-        position: relative;
-        color: red;
-      }
 
-      .hover-underline-animation1::after {
-        content: "";
-        position: absolute;
-        width: 100%;
-        transform: scaleX(0);
-        height: 2px;
-        bottom: 0;
-        left: 0;
-        background-color: red;
-        transform-origin: bottom right;
-        transition: transform 0.25s ease-out;
-      }
-
-      .hover-underline-animation1:hover::after {
-        transform: scaleX(1);
-        transform-origin: bottom left;
-      }
-
-      .button-77 {
-        align-items: center;
-        appearance: none;
-        background-clip: padding-box;
-        background-color: initial;
-        background-image: none;
-        border-style: none;
-        box-sizing: border-box;
-        color: #fff;
-        cursor: pointer;
-        display: inline-block;
-        flex-direction: row;
-        flex-shrink: 0;
-        /* font-family: Eina01, sans-serif; */
-        /* font-size: 16px; */
-        font-weight: 800;
-        justify-content: center;
-        line-height: 24px;
-        margin: 0;
-        /* min-height: 64px; */
-        outline: none;
-        overflow: visible;
-        padding: 10px 26px;
-        pointer-events: auto;
-        position: relative;
-        text-align: center;
-        text-decoration: none;
-        text-transform: none;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-        vertical-align: middle;
-        width: auto;
-        word-break: keep-all;
-        z-index: 0;
-      }
-      /* 
-      @media (min-width: 768px) {
-        .button-77 {
-          padding: 19px 32px;
-        }
-      } */
-
-      .button-77:before,
-      .button-77:after {
-        border-radius: 80px;
-      }
-
-      .button-77:before {
-        background-color: rgba(249, 58, 19, 0.32);
-        content: "";
-        display: block;
-        height: 100%;
-        left: 0;
-        overflow: hidden;
-        position: absolute;
-        top: 0;
-        width: 100%;
-        z-index: -2;
-      }
-
-      .button-77:after {
-        background-color: initial;
-        background-image: linear-gradient(92.83deg, #ff7426 0, #f93a13 100%);
-        bottom: 4px;
-        content: "";
-        display: block;
-        left: 4px;
-        overflow: hidden;
-        position: absolute;
-        right: 4px;
-        top: 4px;
-        transition: all 100ms ease-out;
-        z-index: -1;
-      }
-
-      .button-77:hover:not(:disabled):after {
-        bottom: 0;
-        left: 0;
-        right: 0;
-        top: 0;
-        transition-timing-function: ease-in;
-      }
-
-      .button-77:active:not(:disabled) {
-        color: #ccc;
-      }
-
-      .button-77:active:not(:disabled):after {
-        background-image: linear-gradient(
-            0deg,
-            rgba(0, 0, 0, 0.2),
-            rgba(0, 0, 0, 0.2)
-          ),
-          linear-gradient(92.83deg, #ff7426 0, #f93a13 100%);
-        bottom: 4px;
-        left: 4px;
-        right: 4px;
-        top: 4px;
-      }
-
-      .button-77:disabled {
-        cursor: default;
-        opacity: 0.24;
-      }
-    </style>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   </head>
@@ -156,15 +25,15 @@
     <script>
       AOS.init();
     </script>
-    <div data-aos="fade-left">
+    <div data-aos="zoom-in">
       <nav
         class="navbar navbar-expand-lg"
         style="
           background: rgba(0, 0, 0, 0.6);
           margin-top: 8px;
           margin-bottom: 45px;
-          padding-top: 0.8em;
-          padding-bottom: 0.8em;
+          padding-top: 0.2em;
+          padding-bottom: 0.2em;
           color: #fff;
           border-radius: 10px;
           -webkit-box-shadow: 2px 2px 15px 0px rgba(0, 3, 0, 0.7);
@@ -174,9 +43,9 @@
       >
         <a
           class="navbar-brand"
-          href="{%url 'view-attendance-home' %}"
+          href="{%url 'view-my-attendance-student-login' %}"
           style="color: yellow; font-weight: 500"
-          >Attendance Dashboard</a
+          >Attendance Summary</a
         >
         <button
           class="navbar-toggler"
@@ -191,33 +60,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a
-                class="nav-link hover-underline-animation1"
-                href="{%url 'view-attendance-student' %}"
-                style="color: white"
-                >By Student</a
-              >
-            </li>
-            <li class="nav-item active">
-              <a
-                class="nav-link button-77"
-                href="{% url 'view-attendance-date' %}"
-                style="color: white"
-                >By Date</a
-              >
-            </li>
-
-            <li class="nav-item active" style="padding-left: 60vw">
-              <a
-                class="nav-link"
-                href="{% url 'dashboard' %}"
-                style="
-                  color: rgb(200, 149, 242);
-                  font-size: 15px;
-                  font-weight: bold;
-                "
-                >Back to Admin Panel</a
+            <li class="nav-item active" style="padding-left: 1740px">
+              <a class="nav-link" href="{% url 'dashboard' %}"
+                >Back to Dashboard</a
               >
             </li>
           </ul>
@@ -229,19 +74,17 @@
           <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
-              <legend class="border-bottom mb-4">Select Date</legend>
+              <legend class="border-bottom mb-4">Select Duration</legend>
               {{form| crispy}}
             </fieldset>
 
             <div class="form-group">
-              <button class="btn btn-outline-info" type="submit" value="Create">
-                Submit
-              </button>
+              <button class="btn btn-outline-info" type="submit">Submit</button>
             </div>
           </form>
         </div>
-        {% if qs %}
 
+        {%if qs%}
         <table class="table" style="margin-top: 5em">
           <thead class="thead-dark">
             <tr>
@@ -260,6 +103,7 @@
             <tr>
               <td>{{ item.date }}</td>
               <td>{{ item.user.username}}</td>
+
               {% if item.present %}
               <td>P</td>
               {% else %}
@@ -283,7 +127,7 @@
         <div class="card" style="margin-top: 5em; margin-bottom: 10em">
           <img
             class="card-img-top"
-            src="{% static 'recognition/img/attendance_graphs/hours_vs_student/1.png'%}"
+            src="{% static 'recognition/img/attendance_graphs/student_login/1.png'%}"
             alt="Card image cap"
           />
           <div class="card-body">

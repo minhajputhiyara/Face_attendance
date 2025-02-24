@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -18,6 +17,7 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
+
     <style>
       .hover-underline-animation1 {
         display: inline-block;
@@ -156,7 +156,7 @@
     <script>
       AOS.init();
     </script>
-    <div data-aos="fade-left">
+    <div data-aos="fade-right">
       <nav
         class="navbar navbar-expand-lg"
         style="
@@ -193,7 +193,7 @@
           <ul class="navbar-nav">
             <li class="nav-item active">
               <a
-                class="nav-link hover-underline-animation1"
+                class="nav-link button-77"
                 href="{%url 'view-attendance-student' %}"
                 style="color: white"
                 >By Student</a
@@ -201,7 +201,7 @@
             </li>
             <li class="nav-item active">
               <a
-                class="nav-link button-77"
+                class="nav-link hover-underline-animation1"
                 href="{% url 'view-attendance-date' %}"
                 style="color: white"
                 >By Date</a
@@ -229,19 +229,19 @@
           <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
-              <legend class="border-bottom mb-4">Select Date</legend>
+              <legend class="border-bottom mb-4">
+                Select Username And Duration
+              </legend>
               {{form| crispy}}
             </fieldset>
 
             <div class="form-group">
-              <button class="btn btn-outline-info" type="submit" value="Create">
-                Submit
-              </button>
+              <button class="btn btn-outline-info" type="submit">Submit</button>
             </div>
           </form>
         </div>
-        {% if qs %}
 
+        {%if qs%}
         <table class="table" style="margin-top: 5em">
           <thead class="thead-dark">
             <tr>
@@ -260,6 +260,7 @@
             <tr>
               <td>{{ item.date }}</td>
               <td>{{ item.user.username}}</td>
+
               {% if item.present %}
               <td>P</td>
               {% else %}
@@ -283,7 +284,7 @@
         <div class="card" style="margin-top: 5em; margin-bottom: 10em">
           <img
             class="card-img-top"
-            src="{% static 'recognition/img/attendance_graphs/hours_vs_student/1.png'%}"
+            src="{% static 'recognition/img/attendance_graphs/hours_vs_date/1.png'%}"
             alt="Card image cap"
           />
           <div class="card-body">

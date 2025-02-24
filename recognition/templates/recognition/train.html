@@ -5,91 +5,96 @@
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
     <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
-    />
+      crossorigin="anonymous"/>
 
     <style>
       body {
-        background: url('{% static "recognition/img/background_image3.png"%}')
-          no-repeat center center fixed;
+        background: url('{% static "recognition/img/background_image3.png"%}') no-repeat center center fixed;
         background-size: cover;
+      }
+      .loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+      }
+      .spinner-border {
+        width: 5rem;
+        height: 5rem;
       }
     </style>
   </head>
   <body>
-    <div
-      class="col-lg-12"
-      style="
-        background: rgba(0, 0, 0, 0.6);
-        max-height: 20px;
-        padding-top: 1em;
-        padding-bottom: 3em;
-        color: #fff;
-        border-radius: 10px;
-        -webkit-box-shadow: 2px 2px 15px 0px rgba(0, 3, 0, 0.7);
-        -moz-box-shadow: 2px 2px 15px 0px rgba(0, 3, 0, 0.7);
-        box-shadow: 2px 2px 15px 0px rgba(0, 3, 0, 0.7);
-        margin-left: auto;
-        margin-right: auto;
-      "
-    >
+    <div class="col-lg-12" style="background: rgba(0, 0, 0, 0.6); max-height: 20px; padding-top: 1em; padding-bottom: 3em;
+        color: #fff; border-radius: 10px; -webkit-box-shadow: 2px 2px 15px 0px rgba(0, 3, 0, 0.7);
+        -moz-box-shadow: 2px 2px 15px 0px rgba(0, 3, 0, 0.7); box-shadow: 2px 2px 15px 0px rgba(0, 3, 0, 0.7);
+        margin-left: auto; margin-right: auto;">
       <a href="{% url 'dashboard' %}"><h5 class="text-left">Back</h5></a>
     </div>
 
-    <div
-      class="col-lg-8"
-      style="
-        background: rgba(0, 0, 0, 0.6);
-        margin-top: 70px;
-        margin-left: auto;
-        margin-right: auto;
-        padding-top: 1em;
-        padding-bottom: 1em;
-        color: #fff;
-        border-radius: 10px;
+    <div class="col-lg-8" style="background: rgba(0, 0, 0, 0.6); margin-top: 70px; margin-left: auto;
+        margin-right: auto; padding: 2em; color: #fff; border-radius: 10px;
         -webkit-box-shadow: 2px 2px 15px 0px rgba(0, 3, 0, 0.7);
         -moz-box-shadow: 2px 2px 15px 0px rgba(0, 3, 0, 0.7);
-        box-shadow: 2px 2px 15px 0px rgba(0, 3, 0, 0.7);
-      "
-    >
-      <img
-        src="{% static 'recognition/img/training_visualisation.png' %}"
-        style="width: inherit; margin-right: auto; margin-left: auto"
-      />
+        box-shadow: 2px 2px 15px 0px rgba(0, 3, 0, 0.7);">
+        
+      {% if messages %}
+        {% for message in messages %}
+          {% if message.tags == 'success' %}
+            <img src="{% static 'recognition/img/training_visualisation.png' %}" 
+                 style="width: 100%; margin-right: auto; margin-left: auto"/>
+          {% else %}
+            <div class="loading text-center">
+              <div class="spinner-border text-light mb-4" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <h3>Training in Progress...</h3>
+              <p class="text-light">Please wait while the model is being trained.</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <div class="loading text-center">
+          <div class="spinner-border text-light mb-4" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <h3>Training in Progress...</h3>
+          <p class="text-light">Please wait while the model is being trained.</p>
+        </div>
+      {% endif %}
     </div>
 
-    <div class="col-lg-12" style="padding-top: 100px">
-      {% if messages %} {% for message in messages%}
-      <div class="alert alert-{{message.tags}}">{{message}}</div>
-      {%endfor %} {%endif%}
+    <div class="col-lg-12" style="padding-top: 30px">
+      {% if messages %}
+        {% for message in messages%}
+          <div class="alert alert-{{message.tags}}">{{message}}</div>
+        {% endfor %}
+      {% endif %}
     </div>
 
     <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
       integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
+
+    <script>
+      $(document).ready(function() {
+        {% if not messages %}
+          setTimeout(function() {
+            location.reload();
+          }, 5000);
+        {% endif %}
+      });
+    </script>
   </body>
 </html>
