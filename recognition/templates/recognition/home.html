@@ -117,23 +117,25 @@
       <div class="row">
         <div class="col-md-4" style="padding-left: 130px">
           <div data-aos="fade-up" data-aos-duration="1000">
-            <a href='{%url "mark-your-attendance" %}'
+            <a href='{%url "mark-your-attendance" %}' data-toggle="tooltip" data-placement="bottom" title="Requires camera access. Please ensure your camera is turned on."
               ><img
                 src="{% static 'recognition/img/enter1.png' %}"
                 class="img-responsive"
                 style="width: 300px; height: 300px"
             /></a>
+            <h4 class="text-center">Check In</h4>
           </div>
         </div>
 
         <div class="col-md-4" style="padding-left: 130px">
           <div data-aos="fade-up" data-aos-duration="1500">
-            <a href='{%url "mark-your-attendance-out" %}'
+            <a href='{%url "mark-your-attendance-out" %}' data-toggle="tooltip" data-placement="bottom" title="Requires camera access. Please ensure your camera is turned on."
               ><img
                 src="{% static 'recognition/img/exit1.png' %}"
                 class="img-responsive"
                 style="width: 300px; height: 300px"
             /></a>
+            <h4 class="text-center">Check Out</h4>
           </div>
         </div>
 
@@ -145,19 +147,8 @@
                 class="img-responsive"
                 style="width: 300px; height: 300px"
             /></a>
+            <h4 class="text-center">Login</h4>
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col md-3" style="padding-left: 70px">
-          <h4 class="text-center">Mark Your Attendance - In</h4>
-        </div>
-        <div class="col md-3" style="padding-left: 70px">
-          <h4 class="text-center">Mark Your Attendance - Out</h4>
-        </div>
-
-        <div class="col md-3" style="padding-left: 70px">
-          <h4 class="text-center">Log In</h4>
         </div>
       </div>
     </div>
@@ -179,5 +170,10 @@
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
     ></script>
+    <script>
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
   </body>
 </html>

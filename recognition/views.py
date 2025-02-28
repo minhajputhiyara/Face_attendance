@@ -64,53 +64,71 @@ def create_dataset(username):
 	predictor = dlib.shape_predictor('face_recognition_data/shape_predictor_68_face_landmarks.dat')
 
 	print("[INFO] Initializing Video stream")
-	vs = VideoStream(src=0).start()
-	sampleNum = 0
-	required_samples = 50  
-    
-	print(f"[INFO] Starting capture. Need {required_samples} good samples.")
-	print("[INFO] Please look at the camera and move your head slightly to capture different angles.")
-
-	while(True):
-		frame = vs.read()
-		frame = imutils.resize(frame, width=800)
-		gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-		faces = detector(gray_frame, 0)
-
-		for face in faces:
-			try:
-				(x, y, w, h) = face_utils.rect_to_bb(face)
-				
-				# Instead of using FaceAligner, we'll extract the face region directly
-				face_img = frame[y:y+h, x:x+w]
-				if face_img is not None and face_img.size > 0:
-					# Resize to a standard size
-					face_img = cv2.resize(face_img, (96, 96))
-					
-					sampleNum = sampleNum + 1
-					cv2.imwrite(directory + '/' + str(sampleNum) + '.jpg', face_img)
-					
-					# Draw rectangle and progress
-					cv2.rectangle(frame, (x,y), (x+w,y+h), (0,255,0), 1)
-					progress = f"Progress: {sampleNum}/{required_samples}"
-					cv2.putText(frame, progress, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-					
-					print(f"\rCapturing sample {sampleNum}/{required_samples}", end="")
-					cv2.waitKey(50)
-			except Exception as e:
-				print(f"\nError processing face: {str(e)}")
-				continue
-
-		cv2.imshow("Add Images", frame)
-		cv2.waitKey(1)
+	try:
+		vs = VideoStream(src=0).start()
+		time.sleep(2.0)  # Allow the camera to warm up
 		
-		if(sampleNum >= required_samples):
-			break
-	
-	print("\n[INFO] Dataset capture completed!")
-	vs.stop()
-	cv2.destroyAllWindows()
+		# Test if camera is accessible by reading a frame
+		test_frame = vs.read()
+		if test_frame is None:
+			print("[ERROR] Camera is not accessible")
+			vs.stop()
+			return False
+			
+		sampleNum = 0
+		required_samples = 50  
+		
+		print(f"[INFO] Starting capture. Need {required_samples} good samples.")
+		print("[INFO] Please look at the camera and move your head slightly to capture different angles.")
 
+		while(True):
+			frame = vs.read()
+			if frame is None:
+				print("[ERROR] Failed to capture frame from camera")
+				break
+				
+			frame = imutils.resize(frame, width=800)
+			gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+			faces = detector(gray_frame, 0)
+
+			for face in faces:
+				try:
+					(x, y, w, h) = face_utils.rect_to_bb(face)
+					
+					# Instead of using FaceAligner, we'll extract the face region directly
+					face_img = frame[y:y+h, x:x+w]
+					if face_img is not None and face_img.size > 0:
+						# Resize to a standard size
+						face_img = cv2.resize(face_img, (96, 96))
+						
+						sampleNum = sampleNum + 1
+						cv2.imwrite(directory + '/' + str(sampleNum) + '.jpg', face_img)
+						
+						# Draw rectangle and progress
+						cv2.rectangle(frame, (x,y), (x+w,y+h), (0,255,0), 1)
+						progress = f"Progress: {sampleNum}/{required_samples}"
+						cv2.putText(frame, progress, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+						
+						print(f"\rCapturing sample {sampleNum}/{required_samples}", end="")
+						cv2.waitKey(50)
+				except Exception as e:
+					print(f"\nError processing face: {str(e)}")
+					continue
+
+			cv2.imshow("Add Images", frame)
+			cv2.waitKey(1)
+			
+			if(sampleNum >= required_samples):
+				break
+		
+		print("\n[INFO] Dataset capture completed!")
+		vs.stop()
+		cv2.destroyAllWindows()
+		return sampleNum >= required_samples  # Return True if we got enough samples
+	
+	except Exception as e:
+		print(f"[ERROR] Error initializing camera: {str(e)}")
+		return False
 
 def predict(face_aligned,svc,threshold=0.7):
 	face_encodings=np.zeros((1,128))
@@ -529,8 +547,11 @@ def add_photos(request):
         data = request.POST.copy()
         username = data.get('username')
         if username_present(username):
-            create_dataset(username)
-            messages.success(request, f'Dataset Created')
+            success = create_dataset(username)
+            if success:
+                messages.success(request, f'Dataset Created Successfully!')
+            else:
+                messages.warning(request, f'Camera is not accessible. Please turn on your camera and grant permission to access it.')
             return redirect('add-photos')
         else:
             messages.warning(request, f'No such username found. Please register student first.')
